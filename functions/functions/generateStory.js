@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { VertexAI } from '@google-cloud/vertexai';
 import responseExtract from './utilities/responseExtract.js';
+import cleanJson from './utilities/cleanJson.js';
 
 /**
  * Generates a children's story with scene descriptions for illustrations.
@@ -37,8 +38,8 @@ async function generateStory(prompt) {
 
   // Initialize Vertex AI client with specified project and location
   const vertexAI = new VertexAI({
-    project: 'dreamcraftr',
-    location: 'us-central1',
+    project: '',
+    location: '',
   });
 
   // Set up model
@@ -48,19 +49,20 @@ async function generateStory(prompt) {
 
   // try the prompt
   try {
+    // Generate content using the initial prompt
     resp = await generativeModel.generateContent(initialPrompt);
     contentResponse = resp.response;
+
+    // Extract the response content
+    const extractedTextContent = responseExtract(contentResponse);
+    const cleanedTextContent = cleanJson(extractedTextContent);
+
+  return cleanedTextContent;
   
   } catch (error) {
     console.error("Error generating content:", error);
     throw error;
   }
-
-  // Extract the response content
-  console.log("Content Response:", contentResponse);
-  console.log("Response Extract:", responseExtract(contentResponse));
-
-  return contentResponse;
 }
 
 // Export function

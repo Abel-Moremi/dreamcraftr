@@ -22,4 +22,3 @@ function responseExtract(jsonData) {
 
 // export function
 export default responseExtract;
-

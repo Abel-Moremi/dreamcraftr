@@ -23,7 +23,7 @@ export const generateStoryFunction = https.onRequest(async (req, res) => {
     // Call the generateStory function with the provided prompt
     const story = await generateStory(prompt);
     // Send the generated story back in the response
-    res.status(200).send({ story });
+    res.status(200).send(await generateStory(prompt));
   } catch (error) {
     console.error("Error in story generation:", error);
     res.status(500).send({ error: 'Error generating story.' });
