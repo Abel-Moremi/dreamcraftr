@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { VertexAI } from '@google-cloud/vertexai';
+import responseExtract from './utilities/responseExtract.js';
 
 /**
  * Generates a children's story with scene descriptions for illustrations.
@@ -9,6 +10,10 @@ async function generateStory(prompt) {
 
   // Load environment variables from .env file
   dotenv.config();
+
+  // define variables
+  var resp;
+  var contentResponse;
 
   // initial prompt
   const initialPrompt = `Help create a children's storybook using the following structure: 
@@ -43,30 +48,19 @@ async function generateStory(prompt) {
 
   // try the prompt
   try {
-    const resp = await generativeModel.generateContent(initialPrompt);
-    const contentResponse = resp.response;
-  
-    console.log("I am the goat");
-    // console.log("Content Response:", contentResponse);
-  
-    // Parse content response to JSON if necessary
-    // const jsonResponse = typeof contentResponse === 'string' ? JSON.parse(contentResponse) : contentResponse;
-    // console.log("Response JSON:", jsonResponse);
-  
-    // Access text content
-    // const text = jsonResponse.story.candidates[0].content.parts[0].text;
-    // console.log("Extracted Text:", text);
-  
-    // Clean up any escaped quotes if necessary, and parse to final JSON format
-    // const textJson = JSON.stringify(JSON.parse(text.replace(/\\"/g, '"')), null, 2);
-  
-    console.log("Generated Story and Image Descriptions:", JSON.stringify(contentResponse));
-    return contentResponse;
+    resp = await generativeModel.generateContent(initialPrompt);
+    contentResponse = resp.response;
   
   } catch (error) {
     console.error("Error generating content:", error);
     throw error;
   }
+
+  // Extract the response content
+  console.log("Content Response:", contentResponse);
+  console.log("Response Extract:", responseExtract(contentResponse));
+
+  return contentResponse;
 }
 
 // Export function
