@@ -1,4 +1,4 @@
-import { VertexAI } from '@google-cloud/vertexai';
+import createVertexAI from './createVertexAI.js';
 import responseExtract from './responseExtract.js';
 import cleanJson from './cleanJson.js';
 
@@ -26,11 +26,7 @@ async function generateText(prompt) {
                         Use this as inspiration: --> ${prompt}`;
 
 
-  // Initialize Vertex AI client with specified project and location
-  const vertexAI = new VertexAI({
-    project: '',
-    location: '',
-  });
+  const vertexAI = createVertexAI();
 
   // Set up model
   const generativeModel = vertexAI.getGenerativeModel({
@@ -45,6 +41,7 @@ async function generateText(prompt) {
 
     // Extract the response content
     const extractedTextContent = responseExtract(contentResponse);
+    //console.log('extractedTextContent:', extractedTextContent);
     const cleanedTextContent = cleanJson(extractedTextContent);
 
   return cleanedTextContent;
