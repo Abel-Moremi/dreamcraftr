@@ -9,15 +9,15 @@ async function generateImages(prompt) {
 
     // Set up model
     const imageGenerationModel = vertexAI.preview.getGenerativeModel({
-        // model: 'imagen-3.0-generate-001'
+        model: 'imagen-3.0-generate-001' 
         // model: 'gemini-1.0-pro-vision'
-        model: 'imagegeneration'
+        // model: 'imagegeneration'
     });
 
     // try the prompt
     try {
         // Generate content using the initial prompt
-        resp = await imageGenerationModel.generateContent(prompt);
+        resp = await imageGenerationModel.generateContent(prompt, 1);
         contentResponse = resp.response;
 
         return contentResponse;

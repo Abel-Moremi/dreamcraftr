@@ -1,9 +1,5 @@
-import dotenv from 'dotenv';
 import { https } from 'firebase-functions';
 import generateStory from './generateStory.js';
-
-// Load environment variables from .env file
-dotenv.config();
 
 export const generateStoryFunction = https.onRequest(async (req, res) => {
   // Validate request method
