@@ -6,21 +6,23 @@ from vertexai.generative_models import GenerativeModel, FunctionDeclaration, Too
 initialize_vertex_ai()
 
 # function to generate story line
-def generate_story_line():
+def generate_story_line(prompt):
     # load model
     model = GenerativeModel(
         "gemini-pro",
-        system_instruction=[
-            "create a childrenn's storybook story",
-            "The story should have an introduction, eisght key moments, and a conclution",
-            "the story should be in written in simple and engaging simple langauge for kids"
+        system_instruction = [
+            "write a children's storybook story.",
+            "structure the story with an introduction, eight key momemnets, and a conclusion.",
+            "use simple, engaging language that is suitable for childrent",
+            "Provide vivid, imaginative scene descriptions and ensure character descriptions are detailed, consistent throughout the story, and reused whenever characters reappear.",
         ],
+
         tools=[get_story_tools()],
     )
 
     # generate response 
     response = model.generate_content(
-        "Help me create a short story based on a duck who is kind and helpful.",
+        prompt,
     )
     
     return restructure_response(response)
@@ -55,7 +57,7 @@ def story_func():
                 },
                 "slide_1_image": {
                     "type": "string",
-                    "description": "Slide 1 image description"
+                    "description": "Provide detailed and vivid descriptions for each slide 1 to aid image generation."
                 },
                 "slide_2": {
                     "type": "string",
@@ -63,7 +65,7 @@ def story_func():
                 },
                 "slide_2_image": {
                     "type": "string",
-                    "description": "Slide 2 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 2 to aid image generation."  
                 },
                 "slide_3": {
                     "type": "string",
@@ -71,7 +73,7 @@ def story_func():
                 },
                 "slide_3_image": {
                     "type": "string",
-                    "description": "Slide 3 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 3 to aid image generation."  
                 },
                 "slide_4": {
                     "type": "string",
@@ -79,7 +81,7 @@ def story_func():
                 },
                 "slide_4_image": {
                     "type": "string",
-                    "description": "Slide 4 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 4 to aid image generation."  
                 },
                 "slide_5": {
                     "type": "string",
@@ -87,7 +89,7 @@ def story_func():
                 },
                 "slide_5_image": {
                     "type": "string",
-                    "description": "Slide 5 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 5 to aid image generation."  
                 },
                 "slide_6": {
                     "type": "string",
@@ -95,7 +97,7 @@ def story_func():
                 },
                 "slide_6_image": {
                     "type": "string",
-                    "description": "Slide 6 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 6 to aid image generation."  
                 },
                 "slide_7": {
                     "type": "string",
@@ -103,7 +105,7 @@ def story_func():
                 },
                 "slide_7_image": {
                     "type": "string",
-                    "description": "Slide 7 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 7 to aid image generation."  
                 },
                 "slide_8": {
                     "type": "string",
@@ -111,7 +113,7 @@ def story_func():
                 },
                 "slide_8_image": {
                     "type": "string",
-                    "description": "Slide 8 image description"  
+                    "description": "Provide detailed and vivid descriptions for each slide 8 to aid image generation."  
                 },
                 "conclusion": {
                     "type": "string",
@@ -150,9 +152,13 @@ def story_func():
 
 # a function to restructure response from Vertex AI
 def restructure_response(response):
+    # Convert the response to a dictionary
     dict_response = response.to_dict()
+
+    # Extract the function call arguments
     args = dict_response["candidates"][0]["content"]["parts"][0]["function_call"]["args"]
-    
+
+    # Structure the story
     story = {
         "story": {
             "introduction": {
@@ -175,6 +181,6 @@ def restructure_response(response):
             }
         }
     }
-    
-    # convert to JSON
+
+    # Convert to JSON string with indentation
     return json.dumps(story, indent=4)
